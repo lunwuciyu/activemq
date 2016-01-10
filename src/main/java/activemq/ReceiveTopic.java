@@ -12,13 +12,13 @@ import javax.jms.TextMessage;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.log4j.Logger;
 
-public class Receive {
+public class ReceiveTopic {
 
 	private static String url = "tcp://localhost:61616";
-	private static String topic = "alarm.msg.topic";
+	private static String topic = "msg.topic";
 	private static String user = "";
 	private static String password = "";
-	private static Logger logger = Logger.getLogger(Receive.class);
+	private static Logger logger = Logger.getLogger(ReceiveTopic.class);
 
 	public void receiveMessage() {
 		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory(user, password, url);
@@ -26,7 +26,7 @@ public class Receive {
 		try {
 			connection = connectionFactory.createConnection();
 			connection.start();
-			Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+			Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);// 是否支持事务，接收每条消息后确认
 			Destination destination = session.createTopic(topic);
 			
 			MessageConsumer consumer = session.createConsumer(destination);
@@ -46,7 +46,7 @@ public class Receive {
 	}
 
 	public static void main(String[] args) {
-		Receive receiveMessageFromMQ = new Receive();
+		ReceiveTopic receiveMessageFromMQ = new ReceiveTopic();
 		receiveMessageFromMQ.receiveMessage();
 	}
 }
